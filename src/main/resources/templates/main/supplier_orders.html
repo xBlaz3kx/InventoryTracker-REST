@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="sl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Quicksand"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.5.1/jquery.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/popper.js/2.0.2/umd/popper.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/4.5.0/js/bootstrap.js}"></script>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.5.0/css/bootstrap.css}"/>
+    <title th:text="${supplier_order_title}"></title>
+</head>
+<body>
+<div th:replace="/commons :: header"></div>
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-4 my-5 text-center">
+            <h2 th:text="${supplier_details}"></h2>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-10 p-3">
+            <div class="table-responsive">
+                <table id="supplierProductList"
+                       class="table table-primary table-hover table-dark table-borderless rounded">
+                    <thead>
+                    <tr>
+                        <td th:text="${supplier_order_thead_product_name}"></td>
+                        <td th:text="${supplier_order_thead_product_barcode}"></td>
+                        <td th:text="${supplier_order_thead_product_SKU}"></td>
+                        <td th:text="${supplier_order_thead_product_purchase_price}"></td>
+                        <td th:text="${supplier_order_thead_current_stock}"></td>
+                        <td class="text-center" th:text="${supplier_order_thead_num_input}"></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div class="text-center py-2">
+                <button class="btn btn-dark" id="make-supplier-order" th:text="${supplier_order_make}">
+                    <i class="material-icons">system_update_alt</i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<footer th:replace="/commons :: footer"></footer>
+<script>
+</script>
+</body>
+</html>

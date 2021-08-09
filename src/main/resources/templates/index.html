@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="sl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width"/>
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Quicksand"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.5.1/jquery.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/popper.js/2.0.2/umd/popper.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/4.5.0/js/bootstrap.js}"></script>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.5.0/css/bootstrap.css}"/>
+    <title th:text="${index_title}"></title>
+</head>
+<body>
+<div th:replace="/commons :: header"></div>
+<div class="container-fluid">
+    <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+                            <span data-feather="home"></span>
+                            Dashboard <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="file"></span>
+                            Orders
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="shopping-cart"></span>
+                            Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="users"></span>
+                            Customers
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="bar-chart-2"></span>
+                            Reports
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="layers"></span>
+                            Integrations
+                        </a>
+                    </li>
+                </ul>
+
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                    <span>Saved reports</span>
+                    <a class="d-flex align-items-center text-muted" href="#">
+                        <span data-feather="plus-circle"></span>
+                    </a>
+                </h6>
+                <ul class="nav flex-column mb-2">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="file-text"></span>
+                            Current month
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="file-text"></span>
+                            Last quarter
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Dashboard</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group mr-2">
+                        <button class="btn btn-sm btn-outline-secondary">Export</button>
+                    </div>
+                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
+                        <span data-feather="calendar"></span>
+                        This week
+                    </button>
+                </div>
+            </div>
+            <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
+        </main>
+    </div>
+</div>
+<footer th:replace="/commons :: footer"></footer>
+</body>
+</html>

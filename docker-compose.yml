@@ -1,0 +1,78 @@
+version: '3.4'
+services:
+  inventory_tracker:
+    container_name: "inventory_tracker"
+    build:
+      context: Docker
+      target: app-run
+    depends_on:
+      - mongo
+    volumes:
+      - .:/home/gradle/src
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=organizer"
+      - "traefik.http.routers.organizer.rule=Host(`inventorytracker.com`)"
+      - "traefik.http.routers.organizer.entrypoints=web"
+      - "traefik.http.services.organizer.loadbalancer.server.port=80"
+  tests:
+    build:
+      context: Docker
+      target: gradle-test
+    depends_on:
+      - mongo
+    volumes:
+      - .:/home/gradle/src
+  mongo:
+    image: mongo:4.4.1
+    volumes:
+      - mongo_data
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    ports:
+      - "27017:27017"
+  mongo-express:
+    image: mongo-express
+    restart: always
+    container_name: "mongo-webui"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=inventorytracker"
+      - "traefik.http.routers.mongo-express.rule=Host(`mongo.inventorytracker.com`)"
+      - "traefik.http.routers.mongo-express.entrypoints=web"
+      - "traefik.http.services.mongo-express.loadbalancer.server.port=8081"
+  traefik:
+    image: "traefik:v2.4"
+    container_name: "traefik"
+    command:
+      #- "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web-secure.address=:443"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=inventorytracker"
+      - "traefik.http.routers.traefik-dashboard.rule=Host(`traefik.inventorytracker.com`)"
+      - "traefik.http.services.traefik-dashboard.loadbalancer.server.port=8080"
+      - "traefik.http.routers.traefik-dashboard.service=api@internal"
+      - "traefik.http.routers.traefik-dashboard.entrypoints=web"
+      #- traefik.http.middlewares.basic-auth.basicauth.users=traefik:$$apr1$$SnHDtk1N$$cpc7xSXXrMVnPYdF01WdC0
+      #- traefik.http.routers.traefik-dashboard.middlewares=basic-auth
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+volumes:
+  mongo_data:
+networks:
+  default:
+    external:
+      name: inventorytracker

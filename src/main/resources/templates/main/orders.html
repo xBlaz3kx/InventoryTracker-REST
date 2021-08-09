@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="sl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Quicksand"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.5.1/jquery.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/popper.js/2.0.2/umd/popper.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/4.5.0/js/bootstrap.js}"></script>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.5.0/css/bootstrap.css}"/>
+    <title th:text="${order_title}"></title>
+</head>
+<body>
+<div th:replace="/commons :: header"></div>
+<div id="order-container" class="container">
+    <div id="order-instructions" class="row justify-content-center">
+    </div>
+    <div class="row col-6 m-2 py-3 px-2 justify-content-center">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <select id="order-search-options" class="dropdown-toggle custom-select">
+                    <option value="ordercustomer" th:text="${order_customer}"></option>
+                </select>
+            </div>
+            <input type="text" id="order-search" class="form-control" aria-label="Text input">
+            <input type="date" id="order-search-date" class="form-control" aria-label="Date input">
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-5 m-2">
+            <div class="table-responsive">
+                <table id="orderList" class="table table-primary table-borderless table-dark table-hover rounded">
+                    <thead>
+                    <tr>
+                        <th th:text="${orders_thead_customer}"></th>
+                        <th th:text="${orders_thead_orderdate}"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-5 m-2">
+            <div class="table-responsive">
+                <table id="orderProperties"
+                       class="table table-secondary table-borderless table-dark table-hover rounded">
+                    <thead>
+                    <tr>
+                        <th th:text="${orders_thead_attribute}"></th>
+                        <th th:text="${orders_thead_attribute_value}"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div class="text-center m-2">
+                <button class="btn btn-primary btn-dark" id="order-update-button"
+                        th:text="${update}">
+                    <i class="material-icons">update</i>
+                </button>
+                <button class="btn btn-primary btn-dark" id="order-export-excel" th:text="${export_order_excel}">
+                    <i class="material-icons">arrow_downward</i>
+                </button>
+                <button class="btn btn-primary btn-dark" id="order-export-pdf" th:text="${export_order_pdf}">
+                    <i class="material-icons">picture_as_pdf</i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<footer th:replace="/commons :: footer"></footer>
+</body>
+</html>

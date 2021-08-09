@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="sl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Quicksand"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.5.1/jquery.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/popper.js/2.0.2/umd/popper.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/4.5.0/js/bootstrap.js}"></script>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.5.0/css/bootstrap.css}"/>
+    <title th:text="${customers_title}"></title>
+</head>
+<body>
+<div th:replace="/commons :: header"></div>
+<div class="modal fade" id="new-customer-div" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel" th:text="${customer_add_customer}"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Zapri">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="alert-warning d-none" id="customer-alert-container">
+                    <div class="alert-heading">
+                        <p id="customer-alert-message"></p>
+                    </div>
+                </div>
+                <div class="col-12 justify-content-center">
+                    <form action="api/customers/customer/add" th:id="add_customer">
+                        <div class="form-group">
+                            <label for="companyName" th:text="${customer_company}"></label>
+                            <input type="text" class="form-control" id="companyName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="customerName" th:text="${customer_name}"></label>
+                            <input type="text" class="form-control" id="customerName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="customerSurname" th:text="${customer_surname}"></label>
+                            <input type="text" class="form-control" id="customerSurname" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="customerAddress" th:text="${customer_address}"></label>
+                            <input type="text" class="form-control" id="customerAddress" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="customerPost" th:text="${customer_post}"></label>
+                            <input type="text" class="form-control" id="customerPost" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="customerVAT" th:text="${customer_VATID}"></label>
+                            <input type="text" class="form-control" id="customerVAT" value="">
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-dark" data-dismiss="modal"
+                        th:text="${close}"></button>
+                <button type="button" class="btn btn-secondary btn-dark" id="clear-customer-info"
+                        th:text="${clear}"></button>
+                <button type="submit" id="add-customer" class="btn btn-primary btn-dark" th:text="${add}"></button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid" autofocus>
+    <div class="row justify-content-start">
+        <div class="p-2 text-center">
+            <button id="newCustomer" class="btn btn-primary btn-dark" data-toggle="modal"
+                    data-target="#new-customer-div"><i class="material-icons">add</i>
+            </button>
+        </div>
+    </div>
+    <div class="row col-5 justify-content-end">
+        <div class="m-2 px-5 py-2">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <select id="customer-search-options" class="dropdown-toggle custom-select">
+                        <option value="customername" selected="selected">Ime stranke</option>
+                        <option value="customerfirm">Ime podjetja</option>
+                        <option value="customerpost">Kraj/pošta</option>
+                    </select>
+                </div>
+                <input type="text" id="customer-search" class="form-control"
+                       aria-label="Text input with dropdown button">
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-5 m-2 p-2">
+            <div class="table-responsive">
+                <table id="customerList" class="table table-borderless table-dark table-hover rounded table-primary">
+                    <thead>
+                    <tr>
+                        <th>Ime Stranke</th>
+                        <th>Company</th>
+                        <th class="d-none">Kraj</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-5 m-2 p-2 justify-content-center">
+            <div class="table-responsive">
+                <table id="customerProperties"
+                       class="table table-secondary table-borderless table-dark table-hover rounded">
+                    <thead>
+                    <tr>
+                        <th th:text="${customer_attribute}"></th>
+                        <th th:text="${customer_attribute_value}"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div class="m-2 align-self-center text-center">
+                <button type="button" class="btn btn-primary btn-dark m-2" id="customer-update-properties"
+                        th:text="${customer_update_value}">
+                    <i class="material-icons">update</i>
+                </button>
+                <button type="button" class="btn btn-primary btn-dark m-2" id="customer-delete" data-toggle="modal"
+                        data-target="#customer-delete-conformation" th:text="${delete}">
+                    <i class="material-icons">delete_forever</i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="customer-delete-conformation" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="delete-conformation-label" th:text="${customer_delete}"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Zapri">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger" id="customer-delete-container">
+                    <div class="alert-heading">
+                        <p id="customer-delete-message" class="text-center"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-dark" data-dismiss="modal"
+                        id="close-customer-delete" th:text="${close}">
+                </button>
+                <button type="button" class="btn btn-secondary btn-dark" id="confirm-customer-delete"
+                        th:text="${delete}">
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<footer th:replace="/commons :: footer"></footer>
+</body>
+</html>

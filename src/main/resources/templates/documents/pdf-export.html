@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="sl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Quicksand"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.5.1/jquery.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/popper.js/2.0.2/umd/popper.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/4.5.0/js/bootstrap.js}"></script>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.5.0/css/bootstrap.css}"/>
+    <title>Izvoz v Excel</title>
+</head>
+<body>
+<div th:replace="/commons :: header"></div>
+<div class="container-fluid">
+    <div class="row m-5 p-2 col-2 justify-content-center">
+        <label for="export-selection">Izberite izvoz</label>
+        <select id="export-selection" class="custom-select">
+            <option id="export-inventory" value="inventory">Inventura</option>
+            <option id="export-orders" value="orders">Naročila</option>
+            <option id="export-travel-expenses" value="travelexpenses">Poročilo o potnih stroških</option>
+        </select>
+    </div>
+    <div class="row col-12 p-3 justify-content-center">
+        <div id="export-report-div" class="col-6 p-2">
+            <h2 class="p-1">Tabela poročil o dobavi</h2>
+            <div class="table-responsive py-1">
+                <table id="export-report-table"
+                       class="table table-primary table-borderless table-dark table-hover rounded">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Datum</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div class="text-center">
+                <button id="export-report-button" type="button" class="btn btn-primary m-2 btn-dark">
+                    <i class="material-icons">arrow_downward</i>
+                </button>
+            </div>
+        </div>
+        <div id="export-order-div" class="col-6 align-content-center d-none">
+            <h2>Izvoz naročil</h2>
+            <form>
+                <div class="form-group">
+                    <label for="order-startdate">Začetni datum</label>
+                    <input id="order-startdate" class="form-control" type="date" required>
+                </div>
+                <div class="form-group">
+                    <label for="order-enddate">Končni datum</label>
+                    <input id="order-enddate" class="form-control" type="date">
+                </div>
+                <div class="form-group text-center">
+                    <button id="export-order-button" type="button" class="btn btn-primary btn-dark">
+                        <i class="material-icons">arrow_downward</i>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div id="export-inventory-div" class="col-6 align-content-center d-none">
+            <form>
+                <div class="form-group">
+                    <label for="export-inventory-select"><h2>Izvozi podatke o inventuri</h2></label>
+                    <select id="export-inventory-select" class="custom-select">
+                        <option value="all"></option>
+                    </select>
+                </div>
+                <div class="form-group text-center">
+                    <button id="export-inventory-button" type="button" class="btn btn-primary btn-dark">
+                        <i class="material-icons">arrow_downward</i>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div id="export-travel-expenses-div" class="col-6 align-content-center d-none">
+            <form>
+                <div class="form-group">
+                    <label for="export-travel-expenses-select"><h2>Izvozi podatke o potnih stroških</h2></label>
+                    <select id="export-travel-expenses-select" class="custom-select"></select>
+                </div>
+                <div class="form-group text-center">
+                    <button id="export-travel-expenses-button" type="button" class="btn btn-primary btn-dark">
+                        <i class="material-icons">arrow_downward</i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div th:replace="/commons :: footer"></div>
+</body>
+</html>

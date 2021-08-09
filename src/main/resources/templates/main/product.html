@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="sl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Quicksand"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.5.1/jquery.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/popper.js/2.0.2/umd/popper.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/4.5.0/js/bootstrap.js}"></script>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.5.0/css/bootstrap.css}"/>
+    <title th:text="${products_title}"></title>
+</head>
+<body>
+<div th:replace="/commons :: header"></div>
+<div class="container-fluid col-12 align-self-center">
+    <div class="row justify-content-start">
+        <div class="text-center p-2">
+            <button type="button" class="btn btn-primary btn-dark" data-toggle="modal" data-target="#product-form"
+                    id="newProduct"><i class="material-icons">add</i>
+            </button>
+        </div>
+    </div>
+    <div class="row col-5 m-2 px-5 py-2 justify-content-end">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <select id="product-search-options" class="dropdown-toggle custom-select">
+                    <option value="productname">Naziv izdelka</option>
+                    <option value="productbarcode">Barkoda</option>
+                    <option value="productreference">Referenca</option>
+                </select>
+            </div>
+            <input type="text" id="product-search" class="form-control" aria-label="Text input with dropdown button">
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="m-2 p-1 col-5 table-responsive">
+            <table id="productList" class="table table-primary table-hover table-dark table-borderless rounded">
+                <thead>
+                <tr>
+                    <th th:text="${products_thead_product_name}"></th>
+                    <th th:text="${products_thead_product_reference}"></th>
+                    <th th:text="${products_thead_product_barcode}"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="product : ${products}">
+                    <td th:text="${product.name}"></td>
+                    <td th:text="${product.reference}"></td>
+                    <td th:text="${product.barcode}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-5 m-2 p-1">
+            <div class="table-responsive">
+                <table id="productProperties"
+                       class="table table-secondary table-hover table-dark table-borderless rounded">
+                    <thead>
+                    <tr>
+                        <th th:text="${products_attribute}"></th>
+                        <th th:text="${products_attribute_value}"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="m-2 align-self-center text-center">
+                <button type="button" class="btn btn-primary btn-dark m-2" id="product-update-properties"
+                        th:text="${update}"><i class="material-icons">update</i>
+                </button>
+                <button type="button" class="btn btn-primary btn-dark m-2" id="product-delete" th:text="${delete}"
+                        data-target="#product-delete-conformation" data-toggle="modal"><i class="material-icons">delete_forever</i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="product-form" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel" th:text="${products_add_product}"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Zapri">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="alert-warning d-none" id="product-alert-container">
+                    <div class="alert-heading">
+                        <p id="product-alert-message"></p>
+                    </div>
+                </div>
+                <form action="#" th:action="@{/api/products/product/new}" th:object="${product}" method="post">
+                    <div class="form-group">
+                        <label for="productName" th:text="${product_name}"></label>
+                        <input type="text" class="form-control" id="productName" th:field="*{name}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productBarcode" th:text="${product_barcode}"></label>
+                        <input type="text" class="form-control" id="productBarcode" th:field="*{barcode}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productPrice" th:text="${product_price}"></label>
+                        <input type="number" class="form-control" id="productPrice" min="0" th:field="*{price}"
+                               required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productPurchasePrice" th:text="${product_purchase_price}"></label>
+                        <input type="number" class="form-control" id="productPurchasePrice" th:field="*{purchasePrice}"
+                               min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productSKU" th:text="${product_SKU}"></label>
+                        <input type="number" class="form-control" id="productSKU" min="1" value="1" th:field="*{SKU}">
+                    </div>
+                    <div class="form-group">
+                        <label for="productStock" th:text="${product_stock}"></label>
+                        <input type="number" class="form-control" id="productStock" min="0" value="0"
+                               th:field="*{stock}">
+                    </div>
+                    <div class="form-group">
+                        <label for="productSupplier" th:text="${product_supplier}"></label>
+                        <select id="productSupplier" class="form-control custom-select" th:field="*{supplier}">
+                            <option th:each="supplier:${suppliers}" th:value="${supplier.ID}"
+                                    th:text="${supplier.company}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label th:text="${product_VAT}"></label>
+                    </div>
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-primary btn-dark">
+                            <input type="radio" name="VAT" value="1.22" autocomplete="off" checked required> 22%
+                        </label>
+                        <label class="btn btn-secondary btn-dark">
+                            <input type="radio" name="VAT" value="1.095" autocomplete="off"> 9.5%
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-dark" data-dismiss="modal"
+                        th:text="${close}"></button>
+                <button type="button" class="btn btn-secondary btn-dark" id="clear-product-info"
+                        th:text="${clear}"></button>
+                <button type="submit" id="add-product" class="btn btn-primary btn-dark" th:text="${add}"></button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="product-delete-conformation" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="delete-conformation-label" th:text="${delete_product}"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Zapri">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger" id="product-delete-container">
+                    <div class="alert-heading">
+                        <p id="product-delete-message" class="text-center"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-dark" data-dismiss="modal" id="close-product-delete"
+                        th:text="${close}">
+                </button>
+                <button type="button" class="btn btn-secondary btn-dark" id="confirm-product-delete"
+                        th:text="${delete}"></button>
+            </div>
+        </div>
+    </div>
+</div>
+<footer th:replace="/commons :: footer"></footer>
+</body>
+</html>

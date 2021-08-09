@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="sl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Quicksand"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.5.1/jquery.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/popper.js/2.0.2/umd/popper.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/4.5.0/js/bootstrap.js}"></script>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.5.0/css/bootstrap.css}"/>
+    <title th:text="${suppliers_title}"></title>
+</head>
+<body>
+<div th:replace="/commons :: header"></div>
+<div class="container-fluid">
+    <div class="row justify-content-start">
+        <div class=" m-1 p-1 text-center">
+            <button id="add_supplier" class="btn btn-primary btn-dark" data-toggle="modal" data-target="#new-supplier">
+                <i class="material-icons">add</i>
+            </button>
+        </div>
+    </div>
+    <div class="row col-5 justify-content-center">
+        <div class="m-2 p-3">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <select id="supplier-search-options" class="dropdown-toggle custom-select">
+                        <option selected="selected" value="suppliername">Ime dobavitelja</option>
+                        <option value="suppliercountry">Država dobavitelja</option>
+                    </select>
+                </div>
+                <input type="text" id="supplier-search" class="form-control"
+                       aria-label="Text input with dropdown button">
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="m-2 p-1 col-5 table-responsive">
+            <table id="supplierList" class="table table-primary table-hover table-dark table-borderless rounded">
+                <thead>
+                <tr>
+                    <th th:text="${suppliers_thead_supplier}">Dobavitelj</th>
+                    <th>ID</th>
+                    <th class="d-none" th:text="${suppliers_thead_country}">Država</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+        <div class=" col-5 m-2 p-1">
+            <div class="table-responsive">
+                <table id="supplierProperties"
+                       class="table table-secondary table-hover table-dark table-borderless rounded">
+                    <thead>
+                    <tr>
+                        <th th:text="${suppliers_attribute}"></th>
+                        <th th:text="${suppliers_attribute_value}"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div class="m-2 align-self-center text-center">
+                <button type="button" class="btn btn-primary btn-dark m-2" id="supplier-update-properties"
+                        th:text="${update}">
+                    <i class="material-icons">update</i>
+                </button>
+                <button type="button" class="btn btn-primary btn-dark m-2" id="supplier-delete" data-toggle="modal"
+                        th:text="${delete}"
+                        data-target="#supplier-delete-conformation"><i class="material-icons">delete_forever</i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="new-supplier" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel" th:text="${suppliers_add_supplier}"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Zapri">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="alert-warning">
+                    <div class="alert-heading d-none" id="add-supplier-warning">
+                        <p id="supplier-alert-message"></p>
+                    </div>
+                </div>
+                <div class="justify-content-center">
+                    <form>
+                        <div class="form-group">
+                            <label for="supplierName" th:text="${suppliers_name}"></label>
+                            <input type="text" class="form-control" id="supplierName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="supplierFirmName" th:text="${suppliers_company}"></label>
+                            <input type="text" class="form-control" id="supplierFirmName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="supplierAddress" th:text="${suppliers_address}"></label>
+                            <input type="text" class="form-control" id="supplierAddress" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="supplierPost" th:text="${suppliers_post}"></label>
+                            <input type="text" class="form-control" id="supplierPost" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="supplierCountry" th:text="${suppliers_country}"></label>
+                            <input id="supplierCountry" class="form-control" value="" required/>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="supplierVAT" th:text="${suppliers_VATID}"></label>
+                            <input type="text" class="form-control" id="supplierVAT" required>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-dark" data-dismiss="modal"
+                        th:text="${close}"></button>
+                <button type="button" class="btn btn-secondary btn-dark" id="clear-supplier-info"
+                        th:text="${clear}"></button>
+                <button id="add-supplier" type="button" class="btn btn-primary btn-dark" th:text="${add}">Dodaj</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="supplier-delete-conformation" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="delete-conformation-label" th:text="${delete_supplier}"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Zapri">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger" id="supplier-delete-container">
+                    <div class="alert-heading">
+                        <p id="supplier-delete-message" class="text-center"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-dark" data-dismiss="modal"
+                        id="close-supplier-delete">Zapri
+                </button>
+                <button type="button" class="btn btn-secondary btn-dark" id="confirm-supplier-delete"
+                        th:text="${delete}"></button>
+            </div>
+        </div>
+    </div>
+</div>
+<footer th:replace="/commons :: footer"></footer>
+</body>
+</html>
